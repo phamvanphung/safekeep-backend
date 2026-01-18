@@ -73,7 +73,8 @@ async def run_migrations_online() -> None:
     """
     from sqlalchemy.ext.asyncio import create_async_engine
     
-    url = get_url().replace("+asyncpg", "")
+    # Keep the async driver in the URL for async engine
+    url = get_url()
     connectable = create_async_engine(
         url,
         poolclass=pool.NullPool,
