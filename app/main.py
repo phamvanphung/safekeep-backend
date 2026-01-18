@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import auth, heartbeat, vault
+from app.routers import auth, heartbeat, vault, timer, beneficiary
 from app.database import engine, Base
 
 app = FastAPI(
@@ -24,7 +24,9 @@ app.add_middleware(
 # Include routers
 app.include_router(auth.router)
 app.include_router(heartbeat.router)
+app.include_router(timer.router)
 app.include_router(vault.router)
+app.include_router(beneficiary.router)
 
 
 @app.on_event("startup")

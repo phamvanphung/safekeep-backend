@@ -22,7 +22,7 @@ class User(Base):
 
     # Relationships
     timer = relationship("Timer", back_populates="user", uselist=False)
-    vault = relationship("Vault", back_populates="user", uselist=False)
+    vaults = relationship("Vault", back_populates="user", cascade="all, delete-orphan")
     beneficiaries = relationship("Beneficiary", back_populates="user", cascade="all, delete-orphan")
 
 
@@ -43,12 +43,13 @@ class Vault(Base):
     __tablename__ = "vaults"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), unique=True, nullable=False)
+    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
+    name = Column(String, nullable=False)  # Name/identifier for the vault
     encrypted_data = Column(Text, nullable=True)
     client_salt = Column(String, nullable=True)
 
     # Relationships
-    user = relationship("User", back_populates="vault")
+    user = relationship("User", back_populates="vaults")
 
 
 class Beneficiary(Base):

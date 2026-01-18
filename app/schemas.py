@@ -50,13 +50,20 @@ class TimerUpdate(BaseModel):
     timeout_days: Optional[int] = None
 
 
+class BeneficiaryUpdate(BaseModel):
+    email: Optional[EmailStr] = None
+    name: Optional[str] = None
+
+
 # Vault Schemas
 class VaultCreate(BaseModel):
+    name: str
     encrypted_data: Optional[str] = None
     client_salt: Optional[str] = None
 
 
 class VaultUpdate(BaseModel):
+    name: Optional[str] = None
     encrypted_data: Optional[str] = None
     client_salt: Optional[str] = None
 
@@ -64,6 +71,7 @@ class VaultUpdate(BaseModel):
 class VaultResponse(BaseModel):
     id: UUID
     user_id: UUID
+    name: str
     encrypted_data: Optional[str]
     client_salt: Optional[str]
 

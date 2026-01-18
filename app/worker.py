@@ -45,14 +45,19 @@ async def process_expired_timers():
                 # Get user's beneficiaries
                 beneficiaries = await crud.get_beneficiaries(session, timer.user_id)
                 
-                # Get user's vault
-                vault = await crud.get_vault(session, timer.user_id)
+                # Get all user's vaults
+                vaults = await crud.get_vaults(session, timer.user_id)
                 
-                encrypted_data = vault.encrypted_data if vault else None
-                
-                # Send email to each beneficiary (simulated)
+                # Send email to each beneficiary with all vault data (simulated)
                 for beneficiary in beneficiaries:
-                    print(f"Sending Email to [{beneficiary.email}] with data [{encrypted_data}]")
+                    vault_data = []
+                    for vault in vaults:
+                        vault_data.append({
+                            "name": vault.name,
+                            "encrypted_data": vault.encrypted_data,
+                            "client_salt": vault.client_salt
+                        })
+                    print(f"Sending Email to [{beneficiary.email}] with vaults data: {vault_data}")
                 
                 # Mark timer as triggered
                 await crud.mark_timer_triggered(session, timer.user_id)
