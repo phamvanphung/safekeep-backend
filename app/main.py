@@ -6,7 +6,10 @@ from app.database import engine, Base
 app = FastAPI(
     title="Dead Man's Switch API",
     description="Zero-Knowledge Dead Man's Switch Backend",
-    version="1.0.0"
+    version="1.0.0",
+    docs_url="/docs",
+    redoc_url="/redoc",
+    openapi_url="/openapi.json"
 )
 
 # CORS middleware
@@ -39,3 +42,9 @@ async def root():
 @app.get("/health")
 async def health():
     return {"status": "healthy"}
+
+
+@app.get("/openapi.json", include_in_schema=False)
+async def get_openapi():
+    """Test endpoint to verify OpenAPI schema generation"""
+    return app.openapi()
