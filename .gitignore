@@ -12,7 +12,8 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+src/lib/*
+!src/lib/api.ts
 lib64/
 parts/
 sdist/
