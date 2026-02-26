@@ -4,6 +4,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { login as apiLogin, register as apiRegister } from "../lib/api";
 import { useAuth } from "../state/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const schema = z.object({
   email: z.string().email("Invalid email address"),
@@ -16,6 +17,7 @@ export function AuthPage() {
   const [mode, setMode] = useState<"login" | "register">("login");
   const [serverError, setServerError] = useState<string | null>(null);
   const { login } = useAuth();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -34,6 +36,7 @@ export function AuthPage() {
       }
       const res = await apiLogin(values.email, values.password);
       login(res.access_token, values.email);
+      navigate("/dashboard");
     } catch (err: any) {
       const detail = err?.response?.data?.detail ?? "Authentication failed";
       setServerError(Array.isArray(detail) ? detail[0]?.msg ?? "Authentication failed" : detail);
