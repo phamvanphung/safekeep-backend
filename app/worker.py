@@ -123,8 +123,8 @@ async def process_expired_timers():
                 # Get user's beneficiaries
                 beneficiaries = await crud.get_beneficiaries(session, timer.user_id)
 
-                # Get all user's vaults
-                vaults = await crud.get_vaults(session, timer.user_id)
+                # Get all user's vaults (as a concrete list)
+                vaults = list(await crud.get_vaults(session, timer.user_id))
 
                 # Email body built once per user
                 body_html = build_email_body(vaults)
@@ -133,8 +133,7 @@ async def process_expired_timers():
                 # Send email to each beneficiary with all vault data
                 for beneficiary in beneficiaries:
                     print(
-                        f"Sending Email to [{beneficiary.email}] with "
-                        f"{len(list(vaults)) if hasattr(vaults, '__len__') else 'N'} vault(s)",
+                        f"Sending Email to [{beneficiary.email}] with {len(vaults)} vault(s)",
                     )
                     await send_email_async(beneficiary.email, subject, body_html)
 
